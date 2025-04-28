@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { SuccessResponseObject } = require('../common/http');
+const { detectSSR } = require('../common/utils');
 
 const r = Router();
 
