@@ -1,77 +1,119 @@
-## Vercel Express API boilerplate
+# SSR Detector
 
-Opinionated Node.js template for creating **simple** APIs and PoCs using Express<sup>1</sup> on Vercel's serverless platform.
+A service to detect if a repository requires Server-Side Rendering (SSR).
 
-## Motivation
+## Description
 
-Simply put, I got tired of having to do the same dance EVERY SINGLE TIME I needed to quickly spin up an API for a POC I'm working on, or small (micro? 😁) services I spin up.
+SSR Detector is a tool that analyzes GitHub repositories or local project directories to determine if they require Server-Side Rendering (SSR). It examines various indicators such as framework dependencies, configuration files, directory structures, and code patterns to identify the need for SSR.
+
+The tool can identify popular SSR frameworks like:
+- Next.js
+- Nuxt.js
+- SvelteKit
+- Remix
+- Gatsby
+- Angular Universal
+- And more
+
+## Features
+
+- Analyze local repositories or GitHub URLs
+- Detect SSR frameworks and libraries
+- Identify server-side packages
+- Recognize SSR-specific configuration files
+- Examine project structures for SSR indicators
+- Search code for SSR-specific patterns
+- Provide confidence score for SSR detection
+- Generate detailed evidence for findings
+
+## Installation
+
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd repo-nature
+
+# Install dependencies
+npm install
+```
 
 ## Usage
 
-Making use of this template is pretty straightforward. Three ways...
+### As a CLI Tool
 
-1. Clone it,
-2. Fork it, or,
-3. Even better, generate a new project on Github using this as a template.
+```bash
+# Analyze the current directory
+node index.js
 
-## Project Structure
+# Analyze a specific local repository
+node index.js /path/to/repository
 
-```
-.
-├── app.js
-├── config/
-├── controllers/
-├── node_modules/
-├── package.json
-├── routes/
-│   ├── demo.route.js
-│   └── index.js
-├── services/
-├── common/
-├── vercel.json
-└── yarn.lock
+# Analyze a GitHub repository (requires GitHub token)
+GITHUB_TOKEN=your_github_token node index.js https://github.com/username/repo
 ```
 
-### Brief Overview
+### As an API Server
 
-#### `app.js`
+```bash
+# Start the server
+npm start
 
-Express app entry point
+# Start with hot-reloading (development)
+npm run dev
+```
 
-#### `config/`
+#### API Endpoints
 
-for configuration stuff... for example, database connection setup
+1. **Health Check**
+   - `GET /health`
+   - Returns a simple health status to confirm the service is running
 
-#### `controllers/`
+2. **Check Repository**
+   - `GET /check-repo?repoPath=<path-or-url>&githubToken=<github-token>`
+   - Parameters:
+     - `repoPath`: Path to local repository or GitHub URL (required)
+     - `githubToken`: GitHub API token for accessing private repositories (optional)
+   - Returns: JSON object with SSR detection results
 
-mostly express route handlers
+## API Response Format
 
-#### `node_modules/`
+```json
+{
+  "results": {
+    "needsSSR": true|false,
+    "evidence": ["list", "of", "evidence", "items"],
+    "frameworkDetected": "Detected Framework Name",
+    "confidence": 75
+  }
+}
+```
 
-black hole 🙃
+## How It Works
 
-#### `routes/`
+SSR Detector uses several strategies to detect if a repository requires SSR:
 
-- `index.js` – bootstraps all routes. new namespaces should always be registered here
-- `demo.route.js` – sample standalone route
+1. **Package Analysis**: Checks `package.json` for SSR frameworks and libraries
+2. **Configuration Files**: Looks for framework-specific configuration files
+3. **Directory Structure**: Identifies SSR-related directory patterns
+4. **Code Analysis**: Searches for SSR-specific code patterns like `getServerSideProps` or `renderToString`
 
-#### `services/`
+Based on these findings, it calculates a confidence score and determines if the repository requires SSR.
 
-for "external" services (e.g. a weather.service.js file for interacting with darksky API)
+## Environment Variables
 
-#### `common/`
+- `PORT`: Server port (default: 9002)
+- `GITHUB_TOKEN`: GitHub API token for accessing private repositories
 
-¯\\\_(ツ)\_/¯
+## Dependencies
 
-## Bundled Endpoints
+- Express: Web server framework
+- @octokit/rest: GitHub API client
+- nodemon (dev): For hot-reloading during development
 
-After cloning/forking this template, the following endpoints can be immediately accessed:
+## License
 
-- `GET /`
-- `GET /demo`
+ISC
 
----
+## Contributing
 
-<sup>1</sup> depending on your use-case, making use of Express with Vercel's serverless platform may not be ideal as they suggest making use of [the helpers](https://vercel.com/blog/vercel-node-helpers) provided for handling requests and making use of the Vercel config file for routing.
-
-While I do make use of the helpers and routing for some projects ([sample](https://gist.github.com/akhilome/ebcc2aa8b03a8377f6eff9ddaff9093b)), I also love using Express as it drastically reduces routing complexity, I've not had any issues with setup, AND, it makes whatever project developed platform agnostic.
+Contributions are welcome! Please feel free to submit a Pull Request.
