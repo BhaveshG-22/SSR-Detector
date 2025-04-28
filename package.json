@@ -1,0 +1,28 @@
+{
+  "name": "express-vercel",
+  "version": "0.7.0",
+  "description": "express vercel boilerplate",
+  "main": "app.js",
+  "author": "Kizito Akhilome <kizito@akhilo.me>",
+  "license": "MIT",
+  "scripts": {
+    "start": "vercel dev",
+    "test": "jest -i"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "keywords": [
+    "vercel",
+    "serverless"
+  ],
+  "dependencies": {
+    "express": "^5.1.0",
+    "helmet": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "supertest": "^7.1.0"
+  }
+}
